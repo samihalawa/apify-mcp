@@ -11,7 +11,27 @@ startCommand:
       apifyToken:
         type: string
         description: The API token for accessing Apify's services.
+      actors:
+        type: string
+        description: Comma-separated list of Actor full names to load at startup (e.g., apify/google-search-scraper,apify/instagram-scraper)
+      enableAddingActors:
+        type: boolean
+        description: Enable dynamically adding Actors as tools based on user requests
+        default: false
+      tools:
+        type: string
+        description: Comma-separated list of tools to enable (e.g., actors,docs,apify/rag-web-browser)
+        default: ""
   commandFunction:
     # A function that produces the CLI command to start the MCP on stdio.
     |-
-    (config) => ({ command: 'node', args: ['dist/main.js'], env: { APIFY_TOKEN: config.apifyToken } })
+    (config) => ({ 
+      command: 'node', 
+      args: ['dist/mcp.js'], 
+      env: { 
+        APIFY_TOKEN: config.apifyToken,
+        ACTORS: config.actors || '',
+        ENABLE_ADDING_ACTORS: config.enableAddingActors ? 'true' : 'false',
+        TOOLS: config.tools || ''
+      } 
+    })

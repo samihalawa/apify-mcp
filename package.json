@@ -13,7 +13,8 @@
     "./internals.js": "./dist/index-internals.js"
   },
   "bin": {
-    "actors-mcp-server": "./dist/stdio.js"
+    "actors-mcp-server": "./dist/stdio.js",
+    "apify-mcp": "./dist/mcp.js"
   },
   "files": [
     "dist",
