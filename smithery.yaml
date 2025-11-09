@@ -1,3 +1,8 @@
+# LAZY LOADING ENABLED
+# Tool listing is public - NO authentication required to see available tools
+# Authentication credentials are passed during tool execution via tool parameters
+# This improves discoverability in Smithery marketplace while maintaining security
+
 # Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
 
 startCommand:
@@ -5,33 +10,12 @@ startCommand:
   configSchema:
     # JSON Schema defining the configuration options for the MCP.
     type: object
-    required:
-      - apifyToken
+    required: []  # Auth credentials passed at execution time, not required for tool listing
     properties:
       apifyToken:
         type: string
         description: The API token for accessing Apify's services.
-      actors:
-        type: string
-        description: Comma-separated list of Actor full names to load at startup (e.g., apify/google-search-scraper,apify/instagram-scraper)
-      enableAddingActors:
-        type: boolean
-        description: Enable dynamically adding Actors as tools based on user requests
-        default: false
-      tools:
-        type: string
-        description: Comma-separated list of tools to enable (e.g., actors,docs,apify/rag-web-browser)
-        default: ""
   commandFunction:
     # A function that produces the CLI command to start the MCP on stdio.
     |-
-    (config) => ({ 
-      command: 'node', 
-      args: ['dist/mcp.js'], 
-      env: { 
-        APIFY_TOKEN: config.apifyToken,
-        ACTORS: config.actors || '',
-        ENABLE_ADDING_ACTORS: config.enableAddingActors ? 'true' : 'false',
-        TOOLS: config.tools || ''
-      } 
-    })
+    (config) => ({ command: 'node', args: ['dist/main.js'], env: { APIFY_TOKEN: config.apifyToken } })
